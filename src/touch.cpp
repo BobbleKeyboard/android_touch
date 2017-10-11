@@ -15,7 +15,7 @@
 #include <stdint.h>
 #include <limits.h>
 
-#include "DeviceUtils.h"
+#include "device/CharacterDevice.h"
 
 using namespace android_touch;
 
@@ -84,7 +84,7 @@ static int consider_device(const char *devpath, internal_state_t *state) {
     int fd = -1;
     struct libevdev *evdev = NULL;
 
-    if (!DeviceUtils::isCharacterDevice(std::string(devpath))) {
+    if (!CharacterDevice::isCharacterDevice(std::string(devpath))) {
         return handle_mismatch(fd, evdev);
     }
 
