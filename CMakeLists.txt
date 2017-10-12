@@ -4,5 +4,5 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fexceptions -frtti")
 file(GLOB_RECURSE TOUCH_SRC "src/*.cpp" "src/*.h")
 
-add_executable(touch ${TOUCH_SRC})
+add_executable(touch ${TOUCH_SRC} src/device/TouchInputDevice.cpp src/device/TouchInputDevice.h)
 target_link_libraries(touch -levdev)

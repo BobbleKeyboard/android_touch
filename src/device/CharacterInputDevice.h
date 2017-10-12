@@ -5,13 +5,15 @@
 #ifndef PROJECT_CHARACTERDEVICE_H
 #define PROJECT_CHARACTERDEVICE_H
 
-#include "Device.h"
+#include "InputDevice.h"
 
 namespace android_touch {
     /**
      *
      */
-    class CharacterDevice : public Device {
+    class CharacterInputDevice : public InputDevice {
+    protected:
+        static constexpr int STAT_ERROR = -1;
     public:
         /**
          *

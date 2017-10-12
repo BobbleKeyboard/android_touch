@@ -8,8 +8,8 @@
 #include <string>
 
 namespace android_touch {
-    class Device {
-    public:
+    class InputDevice {
+    protected:
         static const std::string DEVICE_ROOT;
     };
 }

@@ -15,7 +15,7 @@
 #include <stdint.h>
 #include <limits.h>
 
-#include "device/CharacterDevice.h"
+#include "device/CharacterInputDevice.h"
 
 using namespace android_touch;
 
@@ -43,7 +43,7 @@ typedef struct {
     int pressure;
 } contact_t;
 
-#include "device/MultiTouchContact.h"
+#include "device/TouchContact.h"
 
 typedef struct {
     int fd;
@@ -84,7 +84,7 @@ static int consider_device(const char *devpath, internal_state_t *state) {
     int fd = -1;
     struct libevdev *evdev = NULL;
 
-    if (!CharacterDevice::isCharacterDevice(std::string(devpath))) {
+    if (!CharacterInputDevice::isCharacterDevice(std::string(devpath))) {
         return handle_mismatch(fd, evdev);
     }
 
@@ -519,7 +519,7 @@ static int start_server(const char *sockname) {
 
 int main(int argc, char *argv[]) {
 
-    MultiTouchContact mc;
+    TouchContact mc;
 
     const char *pname = argv[0];
     const char *devroot = "/dev/input";

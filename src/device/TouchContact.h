@@ -8,15 +8,14 @@
 #include "TouchPoint.h"
 
 namespace android_touch {
-    class MultiTouchContact {
+    class TouchContact {
     protected:
         bool mIsEnabled;
         int mTrackingID;
         TouchPoint mTouchPoint;
 
     public:
-        MultiTouchContact() : mIsEnabled(false), mTrackingID(0) {
-        }
+        TouchContact();
 
 
     };

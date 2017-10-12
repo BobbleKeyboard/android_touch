@@ -13,35 +13,61 @@ namespace android_touch {
         int mPressure;
 
     public:
-        TouchPoint() : mX(0), mY(0), mPressure(0) {
-        }
+        /**
+         *
+         */
+        TouchPoint();
 
-        TouchPoint(int x, int y, int pressure) : mX(x), mY(y), mPressure(pressure) {
-        }
+        /**
+         *
+         * @param x
+         * @param y
+         */
+        TouchPoint(int x, int y);
 
-        void setX(int x) {
-            mX = x;
-        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param pressure
+         */
+        TouchPoint(int x, int y, int pressure);
 
-        void setY(int y) {
-            mY = y;
-        }
+        /**
+         *
+         * @param x
+         */
+        void setX(int x);
 
-        void setPressure(int pressuer) {
-            mPressure = pressuer;
-        }
+        /**
+         *
+         * @param y
+         */
+        void setY(int y);
 
-        int getX() {
-            return mX;
-        }
+        /**
+         *
+         * @param pressuer
+         */
+        void setPressure(int pressuer);
 
-        int getY() {
-            return mY;
-        }
+        /**
+         *
+         * @return
+         */
+        int getX();
 
-        int getPressure() {
-            return mPressure;
-        }
+        /**
+         *
+         * @return
+         */
+        int getY();
+
+        /**
+         *
+         * @return
+         */
+        int getPressure();
     };
 }
 
