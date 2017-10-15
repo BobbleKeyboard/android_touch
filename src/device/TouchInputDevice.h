@@ -8,30 +8,32 @@
 #include <string>
 #include <memory>
 #include <map>
+#include "TouchContact.h"
 
-class TouchInputDevice {
-protected:
-    int mDeviceFileDescriptor;
-    int mDeviceScore;
-    std::string mDevicePath;
+namespace android_touch {
+    class TouchInputDevice {
+    protected:
+        int mDeviceFileDescriptor;
+        int mDeviceScore;
+        std::string mDevicePath;
 
-    int mHasMTSlot;
-    int mHasTrackingID;
-    int mHasKeyButtonTouch;
-    int mHasTouchMajor;
-    int mHasTouchWidthMajor;
-    int mHasPressure;
-    int mMinPressure;
-    int mMaxPressure;
-    int mMaxX;
-    int mMaxY;
-    int mMaxContacts;
-    int mMaxTrackingID;
-    int tracking_id;
-    std::map<int, std::shared_ptr> mTouchContacts;
+        int mHasMultiTouchSlot;
+        int mHasTrackingID;
+        int mHasKeyButtonTouch;
+        int mHasTouchMajor;
+        int mHasTouchWidthMajor;
+        int mHasPressure;
+        int mMinPressure;
+        int mMaxPressure;
+        int mMaxX;
+        int mMaxY;
+        int mMaxContacts;
+        int mMaxTrackingID;
+        int mTrackingID;
+        std::map<int, std::shared_ptr<TouchContact>> mTouchContacts;
 
-    struct libevdev *evdev = NULL;
-};
-
+        struct libevdev *mEventDevice = NULL;
+    };
+}
 
 #endif //PROJECT_TOUCHINPUTDEVICE_H
