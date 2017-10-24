@@ -8,15 +8,19 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <vector>
+#include <iostream>
+#include <libevdev-1.0/libevdev/libevdev.h>
+#include <fcntl.h>
 #include "TouchContact.h"
+#include "../utils/FileUtils.h"
+#include "CharacterInputDevice.h"
 
 namespace android_touch {
-    class TouchInputDevice {
+    class TouchInputDevice : public CharacterInputDevice {
     protected:
+        std::string mInputDeviceFilePath;
         int mDeviceFileDescriptor;
-        int mDeviceScore;
-        std::string mDevicePath;
-
         int mHasMultiTouchSlot;
         int mHasTrackingID;
         int mHasKeyButtonTouch;
@@ -31,8 +35,14 @@ namespace android_touch {
         int mMaxTrackingID;
         int mTrackingID;
         std::map<int, std::shared_ptr<TouchContact>> mTouchContacts;
-
         struct libevdev *mEventDevice = NULL;
+
+    public:
+        TouchInputDevice(std::string inputDevicePath) {
+            mInputDeviceFilePath = inputDevicePath;
+        }
+
+        static std::shared_ptr<TouchInputDevice> getNewInstance();
     };
 }
 
