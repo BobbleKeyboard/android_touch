@@ -4,4 +4,4 @@
 
 #include "InputDevice.h"
 
-const std::string android_touch::InputDevice::DEVICE_ROOT = "/dev/input";
+const std::string android_touch::InputDevice::INPUT_DEVICE_ROOT = "/dev/input/";

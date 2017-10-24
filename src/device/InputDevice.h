@@ -10,7 +10,7 @@
 namespace android_touch {
     class InputDevice {
     protected:
-        static const std::string DEVICE_ROOT;
+        static const std::string INPUT_DEVICE_ROOT;
     };
 }
 
