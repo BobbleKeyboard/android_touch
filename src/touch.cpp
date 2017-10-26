@@ -44,6 +44,7 @@ typedef struct {
 } contact_t;
 
 #include "device/TouchContact.h"
+#include "device/TouchInputDevice.h"
 
 typedef struct {
     int fd;
@@ -518,8 +519,12 @@ static int start_server(const char *sockname) {
 }
 
 int main(int argc, char *argv[]) {
+    std::shared_ptr<TouchInputDevice> dev = TouchInputDevice::getNewInstance();
+    if (dev != nullptr) {
+        std::cout << "found input device" << std::endl;
+    }
 
-    TouchContact mc;
+    return 0;
 
     const char *pname = argv[0];
     const char *devroot = "/dev/input";

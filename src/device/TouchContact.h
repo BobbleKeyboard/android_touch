@@ -16,8 +16,6 @@ namespace android_touch {
 
     public:
         TouchContact();
-
-
     };
 }
 

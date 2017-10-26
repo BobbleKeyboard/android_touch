@@ -76,3 +76,59 @@ std::shared_ptr<android_touch::TouchInputDevice> android_touch::TouchInputDevice
 
     return nullptr;
 }
+
+android_touch::TouchInputDevice::TouchInputDevice(const std::string &inputDevicePath) {
+    mInputDeviceFilePath = inputDevicePath;
+
+    mDeviceFileDescriptor = open(mInputDeviceFilePath.c_str(), O_RDWR);
+    if (mDeviceFileDescriptor < 0) {
+        libevdev_free(mInputEventDevice);
+        return;
+    }
+
+    if (libevdev_new_from_fd(mDeviceFileDescriptor, &mInputEventDevice)) {
+        libevdev_free(mInputEventDevice);
+        return;
+    }
+
+    mHasMultiTouchSlot = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_SLOT) == 1;
+    mHasTrackingID = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TRACKING_ID) == 1;
+    mHasKeyButtonTouch = libevdev_has_event_code(mInputEventDevice, EV_KEY, BTN_TOUCH) == 1;
+    mHasTouchMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TOUCH_MAJOR) == 1;
+    mHasTouchWidthMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_WIDTH_MAJOR) == 1;
+    mHasPressure = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_PRESSURE) == 1;
+
+    if (mHasPressure) {
+        mMinPressure = libevdev_get_abs_minimum(mInputEventDevice, ABS_MT_PRESSURE);
+        mMaxPressure = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_PRESSURE);
+    }
+
+    mMaxX = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_POSITION_X);
+    mMaxY = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_POSITION_Y);
+
+    if (mHasTrackingID) {
+        mMaxTrackingID = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_TRACKING_ID);
+    } else {
+        mMaxTrackingID = INT_MAX;
+    }
+
+    if (!mHasMultiTouchSlot && mMaxTrackingID == 0) {
+        mMaxTrackingID = MAX_SUPPORTED_TOUCH_CONTACTS - 1;
+    }
+
+    if (mHasMultiTouchSlot) {
+        mMaxTouchContacts = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_SLOT) + 1;
+    } else if (mHasTrackingID) {
+        mMaxTouchContacts = mMaxTrackingID + 1;
+    } else {
+        mMaxTouchContacts = 2;
+    }
+
+    if (mMaxTouchContacts > MAX_SUPPORTED_TOUCH_CONTACTS) {
+        mMaxTouchContacts = MAX_SUPPORTED_TOUCH_CONTACTS;
+    }
+
+    for (auto index = 0; index < mMaxTouchContacts; index++) {
+        mTouchContacts[index] = std::make_shared<TouchContact>();
+    }
+}
