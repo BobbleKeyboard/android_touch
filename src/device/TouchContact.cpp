@@ -4,5 +4,5 @@
 
 #include "TouchContact.h"
 
-android_touch::TouchContact::TouchContact() : mIsEnabled(false), mTrackingID(0) {
+android_touch::TouchContact::TouchContact() : mState(State::Disabled), mTrackingID(0), mTouchPoint(std::make_shared<TouchPoint>()) {
 }
