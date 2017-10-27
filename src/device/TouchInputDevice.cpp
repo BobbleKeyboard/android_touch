@@ -95,7 +95,7 @@ android_touch::TouchInputDevice::TouchInputDevice(const std::string &inputDevice
     mHasTrackingID = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TRACKING_ID) == 1;
     mHasKeyButtonTouch = libevdev_has_event_code(mInputEventDevice, EV_KEY, BTN_TOUCH) == 1;
     mHasTouchMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TOUCH_MAJOR) == 1;
-    mHasTouchWidthMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_WIDTH_MAJOR) == 1;
+    mHasWidthMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_WIDTH_MAJOR) == 1;
     mHasPressure = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_PRESSURE) == 1;
 
     if (mHasPressure) {
