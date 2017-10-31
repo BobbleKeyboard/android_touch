@@ -1,9 +1,5 @@
 #include "TouchInput.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 int main() {
     auto touchDevice = android_touch::TouchInput::getNewInstance();
 
@@ -21,7 +17,3 @@ int main() {
     touchDevice->up(0);
     touchDevice->commit();
 }
-
-#ifdef __cplusplus
-}
-#endif

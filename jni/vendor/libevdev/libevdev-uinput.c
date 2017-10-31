@@ -20,7 +20,9 @@
  * OF THIS SOFTWARE.
  */
 
-//#include <config.h>
+#define _GNU_SOURCE
+#include <stdio.h>
+
 #include <fcntl.h>
 #include <poll.h>
 #include <errno.h>
