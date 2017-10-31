@@ -5,11 +5,10 @@
 #ifndef PROJECT_MULTITOUCHCONTACT_H
 #define PROJECT_MULTITOUCHCONTACT_H
 
-#include <bits/shared_ptr.h>
-#include "TouchPoint.h"
+#include <memory>
 
 namespace android_touch {
-    class TouchContact {
+    class TouchState {
     public:
         enum class State {
             WentUp,
@@ -21,10 +20,9 @@ namespace android_touch {
     protected:
         State mState;
         int mTrackingID;
-        std::shared_ptr<TouchPoint> mTouchPoint;
 
     public:
-        TouchContact();
+        TouchState();
 
         void setState(State state) {
             mState = state;
@@ -40,14 +38,6 @@ namespace android_touch {
 
         int getTrackingID() {
             return mTrackingID;
-        }
-
-        void setTouchPoint(std::shared_ptr<TouchPoint> touchPoint) {
-            mTouchPoint = touchPoint;
-        }
-
-        std::shared_ptr<TouchPoint> getTouchPoint() {
-            return mTouchPoint;
         }
     };
 }

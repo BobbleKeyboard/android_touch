@@ -2,10 +2,12 @@
 // Created by kunaldawn on 12/10/17.
 //
 
-#include "TouchInputDevice.h"
+#include "TouchInput.h"
 
-std::shared_ptr<android_touch::TouchInputDevice> android_touch::TouchInputDevice::getNewInstance() {
-    std::vector<std::string> inputDeviceFileNames = FileUtils::getFiles(INPUT_DEVICE_ROOT);
+const std::string android_touch::TouchInput::INPUT_DEVICE_ROOT = "/dev/input/";
+
+std::shared_ptr<android_touch::TouchInput> android_touch::TouchInput::getNewInstance() {
+    std::vector<std::string> inputDeviceFileNames = getFiles(INPUT_DEVICE_ROOT);
 
     int maxInputDeviceScore = -1;
     std::string maxInputDevicePath;
@@ -36,6 +38,11 @@ std::shared_ptr<android_touch::TouchInputDevice> android_touch::TouchInputDevice
             continue;
         }
 
+        if (!libevdev_has_event_code(inputEventDevice, EV_ABS, ABS_MT_SLOT)) {
+            libevdev_free(inputEventDevice);
+            continue;
+        }
+
         if (libevdev_has_event_code(inputEventDevice, EV_ABS, ABS_MT_TOOL_TYPE)) {
             int toolMinimum = libevdev_get_abs_minimum(inputEventDevice, ABS_MT_TOOL_TYPE);
             int toolMaximum = libevdev_get_abs_maximum(inputEventDevice, ABS_MT_TOOL_TYPE);
@@ -46,11 +53,6 @@ std::shared_ptr<android_touch::TouchInputDevice> android_touch::TouchInputDevice
             }
 
             currentInputDeviceScore -= toolMaximum - MT_TOOL_FINGER;
-        }
-
-        if (libevdev_has_event_code(inputEventDevice, EV_ABS, ABS_MT_SLOT)) {
-            currentInputDeviceScore += 100;
-            currentInputDeviceScore += libevdev_get_abs_maximum(inputEventDevice, ABS_MT_SLOT);
         }
 
         std::string inputDeviceName = libevdev_get_name(inputEventDevice);
@@ -71,13 +73,13 @@ std::shared_ptr<android_touch::TouchInputDevice> android_touch::TouchInputDevice
     }
 
     if (maxInputDeviceScore > 0) {
-        return std::make_shared<TouchInputDevice>(maxInputDevicePath);
+        return std::make_shared<TouchInput>(maxInputDevicePath);
     }
 
     return nullptr;
 }
 
-android_touch::TouchInputDevice::TouchInputDevice(const std::string &inputDevicePath) {
+android_touch::TouchInput::TouchInput(const std::string &inputDevicePath) {
     mInputDeviceFilePath = inputDevicePath;
 
     mDeviceFileDescriptor = open(mInputDeviceFilePath.c_str(), O_RDWR);
@@ -91,7 +93,6 @@ android_touch::TouchInputDevice::TouchInputDevice(const std::string &inputDevice
         return;
     }
 
-    mHasMultiTouchSlot = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_SLOT) == 1;
     mHasTrackingID = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TRACKING_ID) == 1;
     mHasKeyButtonTouch = libevdev_has_event_code(mInputEventDevice, EV_KEY, BTN_TOUCH) == 1;
     mHasTouchMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TOUCH_MAJOR) == 1;
@@ -112,23 +113,16 @@ android_touch::TouchInputDevice::TouchInputDevice(const std::string &inputDevice
         mMaxTrackingID = INT_MAX;
     }
 
-    if (!mHasMultiTouchSlot && mMaxTrackingID == 0) {
-        mMaxTrackingID = MAX_SUPPORTED_TOUCH_CONTACTS - 1;
-    }
-
-    if (mHasMultiTouchSlot) {
-        mMaxTouchContacts = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_SLOT) + 1;
-    } else if (mHasTrackingID) {
-        mMaxTouchContacts = mMaxTrackingID + 1;
-    } else {
-        mMaxTouchContacts = 2;
-    }
+    mMaxTouchContacts = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_SLOT) + 1;
 
     if (mMaxTouchContacts > MAX_SUPPORTED_TOUCH_CONTACTS) {
         mMaxTouchContacts = MAX_SUPPORTED_TOUCH_CONTACTS;
     }
 
-    for (auto index = 0; index < mMaxTouchContacts; index++) {
-        mTouchContacts[index] = std::make_shared<TouchContact>();
+    for (auto index = 1; index <= mMaxTouchContacts; index++) {
+        auto contact = std::make_shared<TouchState>();
+        contact->setTrackingID(index);
+        contact->setState(TouchState::State::Disabled);
+        mTouchContacts.push_back(contact);
     }
 }
