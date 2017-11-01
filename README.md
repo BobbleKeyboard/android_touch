@@ -21,7 +21,7 @@ are painfully slow, basically if you want to send touch events via adb it will h
 want to send touch events via uiautomator in android instrumentation test case, it will have medium latency.
 
 **android_touch is a dependency free native Android tool to send multitouch
-inputs at very high speed with very low latency. This soles the problem of
+inputs at very high speed with very low latency. This solves the problem of
 high latency ADB/uiautomator multitouch inputs.**
     
     Latency of android_touch < uiautomator method < adb method
