@@ -35,13 +35,46 @@ namespace android_touch {
         static Mode LOGGING_MODE;
 
     public:
+        /**
+         * Set logging mode, by default mode is set to None
+         *
+         * @param mode Logging mode to use
+         */
         static void setMode(Mode mode);
+
+        /**
+         * Log information message
+         *
+         * @param tag Tag name
+         * @param message Message
+         */
         static void info(std::string tag, std::string message);
-        static void debug(std::string tag, std::string message);;
-        static void verbose(std::string tag, std::string message);;
+
+        /**
+         * Log debug message
+         *
+         * @param tag Tag name
+         * @param message Message
+         */
+        static void debug(std::string tag, std::string message);
+
+        /**
+         * Log verbose message
+         *
+         * @param tag Tag name
+         * @param message Message
+         */
+        static void verbose(std::string tag, std::string message);
 
     private:
-        static void dispatchMessage(std::string message);;
+        /**
+         * Dispatch a log message to correct stream, in case of Linux
+         * the message is dispatched to stdout and in case of Android
+         * the message is dispatched to logcat.
+         *
+         * @param message Message to dispatch
+         */
+        static void dispatchMessage(std::string message);
     };
 }
 

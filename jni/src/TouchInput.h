@@ -50,21 +50,95 @@ namespace android_touch {
         struct libevdev *mInputEventDevice = nullptr;
 
     public:
+        /**
+         * Default constructor of this class.
+         *
+         * @param inputDevicePath Path of the valid input device
+         */
         explicit TouchInput(const std::string &inputDevicePath);
+
+        /**
+         * Get the device path for this touch device
+         * @return Device path
+         */
         std::string getDevicePath();
+
+        /**
+         * Send a commit event
+         */
         void commit();
+
+        /**
+         * Send a reset event
+         */
         void reset();
+
+        /**
+         * Send touch down event
+         *
+         * @param contact Contact ID
+         * @param x X coordinate
+         * @param y Y coordinate
+         * @param pressure Pressure
+         */
         void down(int contact, int x, int y, int pressure);
+
+        /**
+         * Send touch move event
+         *
+         * @param contact Contact ID
+         * @param x X coordinate
+         * @param y Y coordinate
+         * @param pressure Pressure
+         */
         void move(int contact, int x, int y, int pressure);
+
+        /**
+         * Send touch up event
+         *
+         * @param contact Contact ID
+         */
         void up(int contact);
+
+        /**
+         * Wait for specified time
+         *
+         * @param milliseconds Time in milliseconds
+         */
         void delay(int milliseconds);
 
     public:
+        /**
+         * Get the most suitable touch input device by scanning all input device
+         *
+         * @return TouchInput instance if found, else nullpointer
+         */
         static std::shared_ptr<TouchInput> getNewInstance();
 
     protected:
+        /**
+         * Get list of all files in the specified directory
+         *
+         * @param path Root directory
+         * @return list of all files in that directory
+         */
         static std::vector<std::string> getFiles(std::string path);
+
+        /**
+         * Send a raw event to the device
+         *
+         * @param type Event type
+         * @param code Event code
+         * @param value Event value
+         */
         void writeInputEvent(int type, int code, int value);
+
+        /**
+         * Check if given file is a character device file
+         *
+         * @param path path of the file
+         * @return Boolean true if specified file is character device, false otherwise
+         */
         static bool isCharacterDevice(std::string path);
     };
 }

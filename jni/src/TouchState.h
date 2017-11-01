@@ -32,10 +32,37 @@ namespace android_touch {
         int mTrackingID;
 
     public:
+        /**
+         * Default constructor of this class
+         */
         TouchState();
+
+        /**
+         * Set the state
+         *
+         * @param state State
+         */
         void setState(State state);
+
+        /**
+         * Get the state
+         *
+         * @return State
+         */
         State getState();
+
+        /**
+         * Set the tracking ID
+         *
+         * @param trackingID Tracking ID
+         */
         void setTrackingID(int trackingID);
+
+        /**
+         * Get the tracking ID
+         *
+         * @return Tracking ID
+         */
         int getTrackingID();
     };
 }
