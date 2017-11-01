@@ -455,3 +455,40 @@ Scanning dependencies of target android_touch
 [100%] Linking CXX executable android_touch
 [100%] Built target android_touch
 ```
+
+## How do I debug whats happening?
+
+If you are running on Android, then all verbose logs are dispatched to logcat, you can see internal working by:
+
+```bash
+$ adb logcat | grep android_touch
+```
+
+For example following is the debug output in logcat for below command:
+
+```bash
+$ curl -d '[{"type":"down", "contact":0, "x": 100, "y": 100, "pressure": 50}, {"type": "commit"}, {"type": "up", "contact": 0}, {"type": "commit"}]' http://localhost:8080
+```
+
+```text
+android_touch: TouchInput : down : 0 : 100 : 100 : 50
+android_touch: TouchInput : writeInputEvent : 3 : 47 : 0
+android_touch: TouchInput : writeInputEvent : 3 : 57 : 1
+android_touch: TouchInput : writeInputEvent : 3 : 48 : 6
+android_touch: TouchInput : writeInputEvent : 3 : 50 : 4
+android_touch: TouchInput : writeInputEvent : 3 : 53 : 100
+android_touch: TouchInput : writeInputEvent : 3 : 54 : 100
+android_touch: TouchInput : writeInputEvent : 0 : 0 : 0
+android_touch: TouchInput : up : 0
+android_touch: TouchInput : writeInputEvent : 3 : 47 : 0
+android_touch: TouchInput : writeInputEvent : 3 : 57 : -1
+android_touch: TouchInput : writeInputEvent : 0 : 0 : 0
+```
+
+## Who is using it?
+
+Used internally by [Bobble Keyboard](https://bobbleapp.me/home) for their keyboard automation.
+
+## In my device its not working, what should I do?
+
+Provide a patch pull request and it will be merged after review.
