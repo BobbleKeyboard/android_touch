@@ -23,22 +23,10 @@ namespace android_touch {
 
     public:
         TouchState();
-
-        void setState(State state) {
-            mState = state;
-        }
-
-        State getState() {
-            return mState;
-        }
-
-        void setTrackingID(int trackingID) {
-            mTrackingID = trackingID;
-        }
-
-        int getTrackingID() {
-            return mTrackingID;
-        }
+        void setState(State state);
+        State getState();
+        void setTrackingID(int trackingID);
+        int getTrackingID();
     };
 }
 
