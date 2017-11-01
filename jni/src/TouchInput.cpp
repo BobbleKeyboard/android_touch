@@ -256,7 +256,7 @@ std::vector<std::string> android_touch::TouchInput::getFiles(std::string path) {
     DIR *dir = opendir(path.c_str());
     struct dirent *entry = readdir(dir);
 
-    while (entry != NULL) {
+    while (entry != nullptr) {
         if (entry->d_type != DT_DIR) {
             std::string fileName = std::string(entry->d_name);
             list.push_back(fileName);

@@ -25,8 +25,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include "TouchState.h"
 
+#include "TouchState.h"
 #include "../vendor/libevdev/libevdev.h"
 
 namespace android_touch {
