@@ -1,8 +1,7 @@
 #include "TouchInput.h"
-#include "../vendor/httplib/httplib.h"
 #include "Logging.h"
+#include "../vendor/httplib/httplib.h"
 #include "../vendor/jsoncpp/json.h"
-
 
 int main() {
     android_touch::Logging::setMode(android_touch::Logging::Mode::Verbose);
