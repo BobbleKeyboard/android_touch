@@ -2,7 +2,9 @@
 // Created by kunaldawn on 12/10/17.
 //
 
+#include <thread>
 #include "TouchInput.h"
+#include "Logging.h"
 
 const std::string android_touch::TouchInput::INPUT_DEVICE_ROOT = "/dev/input/";
 
@@ -93,26 +95,10 @@ android_touch::TouchInput::TouchInput(const std::string &inputDevicePath) {
         return;
     }
 
-    mHasTrackingID = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TRACKING_ID) == 1;
     mHasKeyButtonTouch = libevdev_has_event_code(mInputEventDevice, EV_KEY, BTN_TOUCH) == 1;
     mHasTouchMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_TOUCH_MAJOR) == 1;
     mHasWidthMajor = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_WIDTH_MAJOR) == 1;
     mHasPressure = libevdev_has_event_code(mInputEventDevice, EV_ABS, ABS_MT_PRESSURE) == 1;
-
-    if (mHasPressure) {
-        mMinPressure = libevdev_get_abs_minimum(mInputEventDevice, ABS_MT_PRESSURE);
-        mMaxPressure = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_PRESSURE);
-    }
-
-    mMaxX = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_POSITION_X);
-    mMaxY = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_POSITION_Y);
-
-    if (mHasTrackingID) {
-        mMaxTrackingID = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_TRACKING_ID);
-    } else {
-        mMaxTrackingID = INT_MAX;
-    }
-
     mMaxTouchContacts = libevdev_get_abs_maximum(mInputEventDevice, ABS_MT_SLOT) + 1;
 
     if (mMaxTouchContacts > MAX_SUPPORTED_TOUCH_CONTACTS) {
@@ -125,4 +111,154 @@ android_touch::TouchInput::TouchInput(const std::string &inputDevicePath) {
         contact->setState(TouchState::State::Disabled);
         mTouchContacts.push_back(contact);
     }
+}
+
+std::string android_touch::TouchInput::getDevicePath() {
+    return mInputDeviceFilePath;
+}
+
+void android_touch::TouchInput::commit() {
+    writeInputEvent(EV_SYN, SYN_REPORT, 0);
+}
+
+void android_touch::TouchInput::reset() {
+    bool needCommit = false;
+    for (const auto &touchContact : mTouchContacts) {
+        if (touchContact->getState() != TouchState::State::Disabled) {
+            needCommit = true;
+            touchContact->setState(TouchState::State::Disabled);
+        }
+    }
+
+    if (needCommit) {
+        commit();
+    }
+}
+
+void android_touch::TouchInput::down(int contact, int x, int y, int pressure) {
+    Logging::info("TouchInput", "down : " + std::to_string(contact) + " : " + std::to_string(x) + " : " + std::to_string(y) + " : " + std::to_string(pressure));
+    if (contact >= mMaxTouchContacts) {
+        return;
+    }
+
+    if (mTouchContacts[contact]->getState() != TouchState::State::Disabled) {
+        reset();
+    }
+
+    mTouchContacts[contact]->setState(TouchState::State::WentDown);
+
+    writeInputEvent(EV_ABS, ABS_MT_SLOT, contact);
+    writeInputEvent(EV_ABS, ABS_MT_TRACKING_ID, mTouchContacts[contact]->getTrackingID());
+
+    if (mHasKeyButtonTouch) {
+        writeInputEvent(EV_KEY, BTN_TOUCH, 1);
+    }
+
+    if (mHasTouchMajor) {
+        writeInputEvent(EV_ABS, ABS_MT_TOUCH_MAJOR, MT_TOUCH_MAJOR);
+    }
+
+    if (mHasWidthMajor) {
+        writeInputEvent(EV_ABS, ABS_MT_WIDTH_MAJOR, MT_WIDTH_MAJOR);
+    }
+
+    if (mHasPressure) {
+        writeInputEvent(EV_ABS, ABS_MT_PRESSURE, pressure);
+    }
+
+    writeInputEvent(EV_ABS, ABS_MT_POSITION_X, x);
+    writeInputEvent(EV_ABS, ABS_MT_POSITION_Y, y);
+}
+
+void android_touch::TouchInput::move(int contact, int x, int y, int pressure) {
+    Logging::info("TouchInput", "move : " + std::to_string(contact) + " : " + std::to_string(x) + " : " + std::to_string(y) + " : " + std::to_string(pressure));
+    if (contact >= mMaxTouchContacts) {
+        return;
+    }
+
+    if (mTouchContacts[contact]->getState() == TouchState::State::Disabled) {
+        return;
+    }
+
+    writeInputEvent(EV_ABS, ABS_MT_SLOT, contact);
+
+    if (mHasTouchMajor) {
+        writeInputEvent(EV_ABS, ABS_MT_TOUCH_MAJOR, MT_TOUCH_MAJOR);
+    }
+
+    if (mHasWidthMajor) {
+        writeInputEvent(EV_ABS, ABS_MT_WIDTH_MAJOR, MT_WIDTH_MAJOR);
+    }
+
+    if (mHasPressure) {
+        writeInputEvent(EV_ABS, ABS_MT_PRESSURE, pressure);
+    }
+
+    writeInputEvent(EV_ABS, ABS_MT_POSITION_X, x);
+    writeInputEvent(EV_ABS, ABS_MT_POSITION_Y, y);
+}
+
+void android_touch::TouchInput::up(int contact) {
+    Logging::info("TouchInput", "up : " + std::to_string(contact));
+    if (contact >= mMaxTouchContacts) {
+        return;
+    }
+
+    if (mTouchContacts[contact]->getState() == TouchState::State::Disabled) {
+        return;
+    }
+
+    mTouchContacts[contact]->setState(TouchState::State::Disabled);
+
+    writeInputEvent(EV_ABS, ABS_MT_SLOT, contact);
+    writeInputEvent(EV_ABS, ABS_MT_TRACKING_ID, -1);
+
+    if (mHasKeyButtonTouch) {
+        writeInputEvent(EV_KEY, BTN_TOUCH, 0);
+    }
+}
+
+void android_touch::TouchInput::writeInputEvent(int type, int code, int value) {
+    Logging::verbose("TouchInput", "writeInputEvent : " + std::to_string(type)  + " : " + std::to_string(code) + " : " + std::to_string(value));
+    timespec timeSpec{};
+    clock_gettime(CLOCK_MONOTONIC, &timeSpec);
+    struct input_event inputEvent = {
+            {timeSpec.tv_sec, timeSpec.tv_nsec / 1000},
+            (uint16_t)type,
+            (uint16_t)code,
+            value
+    };
+    write(mDeviceFileDescriptor, &inputEvent, sizeof(input_event));
+}
+
+bool android_touch::TouchInput::isCharacterDevice(std::string path) {
+    struct stat statusBuffer{};
+
+    if (stat(path.c_str(), &statusBuffer) == -1) {
+        return false;
+    }
+
+    return S_ISCHR(statusBuffer.st_mode);
+}
+
+std::vector<std::string> android_touch::TouchInput::getFiles(std::string path) {
+    std::vector<std::string> list;
+    DIR *dir = opendir(path.c_str());
+    struct dirent *entry = readdir(dir);
+
+    while (entry != NULL) {
+        if (entry->d_type != DT_DIR) {
+            std::string fileName = std::string(entry->d_name);
+            list.push_back(fileName);
+        }
+        entry = readdir(dir);
+    }
+    closedir(dir);
+
+    return list;
+}
+
+void android_touch::TouchInput::delay(int milliseconds) {
+    Logging::info("TouchInput", "delay : " + std::to_string(milliseconds));
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
