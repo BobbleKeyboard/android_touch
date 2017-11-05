@@ -1,6 +1,3 @@
-# android_touch
-![android_touch](android_touch.gif)
-
 ```
                   _           _     _   _                   _
   __ _ _ __   __| |_ __ ___ (_) __| | | |_ ___  _   _  ___| |__
@@ -9,7 +6,9 @@
  \__,_|_| |_|\__,_|_|  \___/|_|\__,_|  \__\___/ \__,_|\___|_| |_|
 ```
 
-## What is this?
+![android_touch](android_touch.gif)
+
+## android_touch
 android_touch is a tool to send multitouch events to android device. Generally it is used by various
 automation scripts to send touch events on real android device.
 
