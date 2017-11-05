@@ -7,24 +7,14 @@
  / _` | '_ \ / _` | '__/ _ \| |/ _` | | __/ _ \| | | |/ __| '_ \
 | (_| | | | | (_| | | | (_) | | (_| | | || (_) | |_| | (__| | | |
  \__,_|_| |_|\__,_|_|  \___/|_|\__,_|  \__\___/ \__,_|\___|_| |_|
-
-Copyright (c) 2017 Kunal Dawn <kunal.dawn@gmail.com>
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License version 3 as published by
-the Free Software Foundation.
 ```
 
 ## What is this?
-To send touch events on android, you can use either adb or uiautomator. What I have observed that both of them
-are painfully slow, basically if you want to send touch events via adb it will have very high latency and if you
-want to send touch events via uiautomator in android instrumentation test case, it will have medium latency.
+android_touch is a tool to send multitouch events to android device. Generally it is used by various
+automation scripts to send touch events on real android device.
 
-**android_touch is a dependency free native Android tool to send multitouch
-inputs at very high speed with very low latency. This solves the problem of
-high latency ADB/uiautomator multitouch inputs.**
-    
-    Latency of android_touch < uiautomator method < adb method
+    android_touch is a dependency free native Android tool to send multitouch
+    inputs at very high speed with very low latency.
 
 android_touch provides a http server for triggering multitouch events and
 gestures on Android devices. It works without root if started via ADB. Touch
@@ -389,7 +379,3 @@ android_touch: TouchInput : writeInputEvent : 0 : 0 : 0
 ## Who is using it?
 
 Used internally by [Bobble Keyboard](https://bobbleapp.me/home) for their keyboard automation.
-
-## In my device its not working, what should I do?
-
-Provide a patch pull request and it will be merged after review.
