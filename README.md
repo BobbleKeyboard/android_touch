@@ -346,76 +346,6 @@ multitouch input touchscreen.
 
 ```bash
 android_touch$ ndk-build
-[arm64-v8a] Compile        : android_touch <= libevdev.c
-[arm64-v8a] Compile        : android_touch <= libevdev-names.c
-[arm64-v8a] Compile        : android_touch <= libevdev-uinput.c
-[arm64-v8a] Compile++      : android_touch <= jsoncpp.cpp
-[arm64-v8a] Compile++      : android_touch <= Logging.cpp
-[arm64-v8a] Compile++      : android_touch <= TouchInput.cpp
-[arm64-v8a] Compile++      : android_touch <= TouchState.cpp
-[arm64-v8a] Compile++      : android_touch <= Server.cpp
-[arm64-v8a] Executable     : android_touch
-[arm64-v8a] Install        : android_touch => libs/arm64-v8a/android_touch
-[x86_64] Compile        : android_touch <= libevdev.c
-[x86_64] Compile        : android_touch <= libevdev-names.c
-[x86_64] Compile        : android_touch <= libevdev-uinput.c
-[x86_64] Compile++      : android_touch <= jsoncpp.cpp
-[x86_64] Compile++      : android_touch <= Logging.cpp
-[x86_64] Compile++      : android_touch <= TouchInput.cpp
-[x86_64] Compile++      : android_touch <= TouchState.cpp
-[x86_64] Compile++      : android_touch <= Server.cpp
-[x86_64] Executable     : android_touch
-[x86_64] Install        : android_touch => libs/x86_64/android_touch
-[mips64] Compile        : android_touch <= libevdev.c
-[mips64] Compile        : android_touch <= libevdev-names.c
-[mips64] Compile        : android_touch <= libevdev-uinput.c
-[mips64] Compile++      : android_touch <= jsoncpp.cpp
-[mips64] Compile++      : android_touch <= Logging.cpp
-[mips64] Compile++      : android_touch <= TouchInput.cpp
-[mips64] Compile++      : android_touch <= TouchState.cpp
-[mips64] Compile++      : android_touch <= Server.cpp
-[mips64] Executable     : android_touch
-[mips64] Install        : android_touch => libs/mips64/android_touch
-[armeabi-v7a] Compile thumb  : android_touch <= libevdev.c
-[armeabi-v7a] Compile thumb  : android_touch <= libevdev-names.c
-[armeabi-v7a] Compile thumb  : android_touch <= libevdev-uinput.c
-[armeabi-v7a] Compile++ thumb: android_touch <= jsoncpp.cpp
-[armeabi-v7a] Compile++ thumb: android_touch <= Logging.cpp
-[armeabi-v7a] Compile++ thumb: android_touch <= TouchInput.cpp
-[armeabi-v7a] Compile++ thumb: android_touch <= TouchState.cpp
-[armeabi-v7a] Compile++ thumb: android_touch <= Server.cpp
-[armeabi-v7a] Executable     : android_touch
-[armeabi-v7a] Install        : android_touch => libs/armeabi-v7a/android_touch
-[armeabi] Compile thumb  : android_touch <= libevdev.c
-[armeabi] Compile thumb  : android_touch <= libevdev-names.c
-[armeabi] Compile thumb  : android_touch <= libevdev-uinput.c
-[armeabi] Compile++ thumb: android_touch <= jsoncpp.cpp
-[armeabi] Compile++ thumb: android_touch <= Logging.cpp
-[armeabi] Compile++ thumb: android_touch <= TouchInput.cpp
-[armeabi] Compile++ thumb: android_touch <= TouchState.cpp
-[armeabi] Compile++ thumb: android_touch <= Server.cpp
-[armeabi] Executable     : android_touch
-[armeabi] Install        : android_touch => libs/armeabi/android_touch
-[x86] Compile        : android_touch <= libevdev.c
-[x86] Compile        : android_touch <= libevdev-names.c
-[x86] Compile        : android_touch <= libevdev-uinput.c
-[x86] Compile++      : android_touch <= jsoncpp.cpp
-[x86] Compile++      : android_touch <= Logging.cpp
-[x86] Compile++      : android_touch <= TouchInput.cpp
-[x86] Compile++      : android_touch <= TouchState.cpp
-[x86] Compile++      : android_touch <= Server.cpp
-[x86] Executable     : android_touch
-[x86] Install        : android_touch => libs/x86/android_touch
-[mips] Compile        : android_touch <= libevdev.c
-[mips] Compile        : android_touch <= libevdev-names.c
-[mips] Compile        : android_touch <= libevdev-uinput.c
-[mips] Compile++      : android_touch <= jsoncpp.cpp
-[mips] Compile++      : android_touch <= Logging.cpp
-[mips] Compile++      : android_touch <= TouchInput.cpp
-[mips] Compile++      : android_touch <= TouchState.cpp
-[mips] Compile++      : android_touch <= Server.cpp
-[mips] Executable     : android_touch
-[mips] Install        : android_touch => libs/mips/android_touch
 ```
 
 ### Building for Linux
@@ -424,36 +354,7 @@ android_touch$ ndk-build
 android_touch$ mkdir build
 android_touch$ cd build
 android_touch/build$ cmake ..
--- The C compiler identification is GNU 6.3.0
--- The CXX compiler identification is GNU 6.3.0
--- Check for working C compiler: /usr/bin/cc
--- Check for working C compiler: /usr/bin/cc -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Check for working CXX compiler: /usr/bin/c++
--- Check for working CXX compiler: /usr/bin/c++ -- works
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done
--- Generating done
--- Build files have been written to: /home/kunaldawn/workspace/dev/android_touch/build
-
 android_touch/build$ make
-Scanning dependencies of target android_touch
-[ 11%] Building CXX object CMakeFiles/android_touch.dir/jni/src/Logging.cpp.o
-[ 22%] Building CXX object CMakeFiles/android_touch.dir/jni/src/Server.cpp.o
-[ 33%] Building CXX object CMakeFiles/android_touch.dir/jni/src/TouchInput.cpp.o
-[ 44%] Building CXX object CMakeFiles/android_touch.dir/jni/src/TouchState.cpp.o
-[ 55%] Building C object CMakeFiles/android_touch.dir/jni/vendor/libevdev/libevdev-names.c.o
-[ 66%] Building C object CMakeFiles/android_touch.dir/jni/vendor/libevdev/libevdev-uinput.c.o
-[ 77%] Building C object CMakeFiles/android_touch.dir/jni/vendor/libevdev/libevdev.c.o
-[ 88%] Building CXX object CMakeFiles/android_touch.dir/jni/vendor/jsoncpp/jsoncpp.cpp.o
-[100%] Linking CXX executable android_touch
-[100%] Built target android_touch
 ```
 
 ## How do I debug whats happening?
