@@ -22,7 +22,7 @@ LOCAL_SRC_FILES := vendor/libevdev/libevdev.c         \
                    src/Logging.cpp                    \
                    src/TouchInput.cpp                 \
                    src/TouchState.cpp                 \
-                   src/Server.cpp                     \
+                   src/HTTPServer.cpp                 \
 
 LOCAL_LDLIBS := -latomic -llog
 
