@@ -25,7 +25,7 @@ android_touch::HTTPServer::HTTPServer(const std::string &host, int port) {
 }
 
 void android_touch::HTTPServer::run() {
-    Logging::setMode(Logging::Mode::Verbose);
+    Logging::setMode(Logging::Mode::Info);
     auto touchInput = TouchInput::getNewInstance();
 
     if (touchInput == nullptr) {
