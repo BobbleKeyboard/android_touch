@@ -128,10 +128,12 @@ std::string android_touch::TouchInput::getDevicePath() {
 }
 
 void android_touch::TouchInput::commit() {
+    Logging::info("TouchInput", "commit");
     writeInputEvent(EV_SYN, SYN_REPORT, 0);
 }
 
 void android_touch::TouchInput::reset() {
+    Logging::info("TouchInput", "reset");
     bool needCommit = false;
     for (const auto &touchContact : mTouchContacts) {
         if (touchContact->getState() != TouchState::State::Disabled) {
