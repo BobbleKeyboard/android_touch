@@ -12,24 +12,30 @@
  * the Free Software Foundation.
  */
 
-#include "TouchInput.h"
-#include "Logging.h"
-#include "../vendor/httplib/httplib.h"
-#include "../vendor/jsoncpp/json.h"
+#include "HTTPServer.h"
 
 int main() {
-    android_touch::Logging::setMode(android_touch::Logging::Mode::Verbose);
-    auto touchInput = android_touch::TouchInput::getNewInstance();
+    android_touch::HTTPServer httpServer("0.0.0.0", 8080);
+    httpServer.run();
+}
+
+android_touch::HTTPServer::HTTPServer(const std::string &host, int port) {
+    mHost = host;
+    mPort = port;
+}
+
+void android_touch::HTTPServer::run() {
+    Logging::setMode(Logging::Mode::Verbose);
+    auto touchInput = TouchInput::getNewInstance();
 
     if (touchInput == nullptr) {
-        android_touch::Logging::info("Server", "No supported touch input found...");
-        return 0;
+        Logging::info("Server", "No supported touch input found...");
+        return;
     }
 
-    android_touch::Logging::info("Server", "Using input device : " + touchInput->getDevicePath());
+    Logging::info("Server", "Using input device : " + touchInput->getDevicePath());
 
-    httplib::Server server;
-    server.post("/", [&touchInput](const httplib::Request& req, httplib::Response& res) {
+    mServer.post("/", [&touchInput, this](const httplib::Request& req, httplib::Response& res) {
         try {
             Json::Value root;
             Json::Reader reader;
@@ -62,6 +68,11 @@ int main() {
                         int value = command.get("value", Json::intValue).asInt();
 
                         touchInput->delay(value);
+                    } else if (commandType == "reset") {
+                        touchInput->reset();
+                    } else if (commandType == "stop") {
+                        Logging::info("Server", "good bye cruel world!");
+                        mServer.stop();
                     }
                 }
             }
@@ -70,6 +81,6 @@ int main() {
         }
     });
 
-    android_touch::Logging::info("Server", "Starting server on port : 8080");
-    server.listen("0.0.0.0", 8080);
+    Logging::info("Server", "Starting server on port : " + std::to_string(mPort));
+    mServer.listen(mHost.c_str(), mPort);
 }
