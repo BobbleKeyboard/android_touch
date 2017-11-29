@@ -51,16 +51,16 @@ To start android_touch http server on the android device run following command:
 ```bash
 $ adb shell /data/loal/tmp/android_touch
 ``` 
-This will start android_touch http server on port 8080
+This will start android_touch http server on port 9889
 
 #### Forwarding android_touch http port to localhost
 
 As the http server is running on Android device itself, to send request from your host
-machine, you need to forward port 8080 of android to any port on host machine. For example
-if you want to send http request on host machines 8080 port:
+machine, you need to forward port 9889 of android to any port on host machine. For example
+if you want to send http request on host machines 9889 port:
  
 ```bash
-$ adb forward tcp:8080 tcp:8080
+$ adb forward tcp:9889 tcp:9889
 ``` 
 
 #### Sending request
@@ -72,7 +72,7 @@ http request or on bash you can use curl tool to do the same.
 Below is the example of sending a click touch event on coordinate 100x100 using curl tool:
 
 ```bash
-$ curl -d '[{"type":"down", "contact":0, "x": 100, "y": 100, "pressure": 50}, {"type": "commit"}, {"type": "up", "contact": 0}, {"type": "commit"}]' http://localhost:8080
+$ curl -d '[{"type":"down", "contact":0, "x": 100, "y": 100, "pressure": 50}, {"type": "commit"}, {"type": "up", "contact": 0}, {"type": "commit"}]' http://localhost:9889
 ```
 
 #### Understanding Multitouch JSON data and format
@@ -357,7 +357,7 @@ $ adb logcat | grep android_touch
 For example following is the debug output in logcat for below command:
 
 ```bash
-$ curl -d '[{"type":"down", "contact":0, "x": 100, "y": 100, "pressure": 50}, {"type": "commit"}, {"type": "up", "contact": 0}, {"type": "commit"}]' http://localhost:8080
+$ curl -d '[{"type":"down", "contact":0, "x": 100, "y": 100, "pressure": 50}, {"type": "commit"}, {"type": "up", "contact": 0}, {"type": "commit"}]' http://localhost:9889
 ```
 
 ```text

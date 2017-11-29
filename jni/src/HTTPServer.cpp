@@ -15,7 +15,7 @@
 #include "HTTPServer.h"
 
 int main() {
-    android_touch::HTTPServer httpServer("0.0.0.0", 8080);
+    android_touch::HTTPServer httpServer("0.0.0.0", 9889);
     httpServer.run();
 }
 
