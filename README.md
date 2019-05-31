@@ -37,19 +37,19 @@ directory. You need to first determine what is your Android CPU Architecture, it
 6. mips
 7. mips64
 
-After you have determined CPU Architecture, you need to push "libs/{CPU_ARCH}/android_touch" to
+After you have determined CPU Architecture, you need to push "libs/{CPU_ARCH}/touch" to
 devices "/data/local/tmp" directory.
 
 For example if your CPU Architecture is "arm64-v8a" then run following command:
 ```bash
-$ adb push libs/arm64-v8a/android_touch /data/local/tmp
+$ adb push libs/arm64-v8a/touch /data/local/tmp
 ```
 
 #### Staring android_touch http server on device
 
 To start android_touch http server on the android device run following command:
 ```bash
-$ adb shell /data/loal/tmp/android_touch
+$ adb shell /data/loal/tmp/touch
 ``` 
 This will start android_touch http server on port 9889
 
@@ -351,7 +351,7 @@ android_touch/build$ make
 If you are running on Android, then all verbose logs are dispatched to logcat, you can see internal working by:
 
 ```bash
-$ adb logcat | grep android_touch
+$ adb logcat | grep touch
 ```
 
 For example following is the debug output in logcat for below command:
