@@ -49,7 +49,7 @@ $ adb push libs/arm64-v8a/touch /data/local/tmp
 
 To start android_touch http server on the android device run following command:
 ```bash
-$ adb shell /data/loal/tmp/touch
+$ adb shell /data/local/tmp/touch
 ``` 
 This will start android_touch http server on port 9889
 
